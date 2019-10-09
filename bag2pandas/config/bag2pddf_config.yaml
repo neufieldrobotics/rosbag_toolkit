@@ -1,0 +1,9 @@
+#namespace: seabed
+topic_list: #- [topic_name, message_type(as per dictionary), variable_name in mat file
+ - [/gps/odom, nav_msgs/Odometry, gps_odom]
+ - [/dvl/odom, nav_msgs/Odometry, dvl_odom] 
+ - [/imu/data, sensor_msgs/Imu, imu_data]
+ - [/heading, std_msgs/Float64, heading]
+ - [/roll, std_msgs/Float64, roll]
+ - [/pitch, std_msgs/Float64, pitch]
+

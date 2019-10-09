@@ -1,0 +1,120 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+@author: Vikrant Shah
+A simple script that can converts rosmessages to matlab mat files
+Define the translation of each message type in a dictionary file and use a 
+config file to specify all the topics to be converted.
+"""
+from __future__ import print_function
+
+import roslib
+import rospy
+import rostopic
+
+import argparse
+import importlib
+import sys
+import rospkg
+import rosbag
+import numpy as np
+import time
+from scipy.io import savemat
+import os
+import yaml
+import logging
+#import progressbar
+#progressbar.streams.wrap_stderr()
+
+bglog = logging.getLogger("bag2matpy")
+logging.basicConfig(level=logging.INFO, format='%(levelname)8s  %(message)s')
+
+
+def save_topic2file(topic_name,variable_name,expression,bagfile,matfile, start_time, subtract_start_time):
+    bglog = logging.getLogger(__name__)
+    data_array = []
+    for topic, msg, ts in bagfile.read_messages(topics=[topic_name]):
+        res = eval("{}".format(expression),{'np':np}, {'m': msg, 't':ts})
+
+        if subtract_start_time:
+            offset_time = ts.to_sec() - start_time
+            res = np.hstack([offset_time,res])
+        
+        data_array.append(res)
+
+    if data_array:    
+        savemat(matfile, {variable_name: np.array(data_array)})
+        bglog.info("Wrote topic: "+topic_name+" to variable: "+variable_name)
+    else:
+        bglog.warn("Notfound! Topic: "+topic_name)
+
+# get the file path for rospy_tutorials
+rospack = rospkg.RosPack()
+
+parser = argparse.ArgumentParser(
+            formatter_class=argparse.RawTextHelpFormatter,
+            description='Convert ROSBAG to mat file.\n\n'
+                        'A simple script that can converts rosmessages to matlab mat files. \
+                         \nDefine the translation of each message type in a dictionary file and use a config file to specify all the topics to be converted..\n\n'
+                        )
+parser.add_argument('-i','--input_bagfile', help='Input rosbag file to input')
+parser.add_argument('-o','--output_dir', help='Output dir for matfile')
+parser.add_argument('-c','--config_file', help='Yaml file which specifies topic names to convert',
+                    default =rospack.get_path('bag2mat')+'/config/bag2matpy_config.yaml')
+parser.add_argument('-d','--dictionary', help='Dictionary file which specifies how to read the topic',
+                    default =rospack.get_path('bag2mat')+'/config/bag2mat_dict.yaml')
+parser.add_argument('-s','--subtract_start_time', default=False, action="store_true" , help="Boolean flag to specify whether to include offset_time obtained by subtracting bag start_time from all timestamps")
+
+args = parser.parse_args()
+
+with open(args.dictionary, 'r') as f:
+    exp_dic = yaml.safe_load(f)
+
+with open(args.config_file, 'r') as f:
+    config = yaml.safe_load(f)
+
+if config['namespace'] is None:
+    ns = ''
+else:
+    ns = '/'+config['namespace']        
+
+subtract_start_time = args.subtract_start_time
+
+bag = rosbag.Bag(args.input_bagfile)
+
+output_mat_name = (os.path.basename(args.input_bagfile)).replace('.bag','.mat')
+
+if args.output_dir is None: 
+    output_mat_path = os.path.dirname(os.path.realpath(args.input_bagfile))+'/'
+else:
+    output_mat_path = os.path.realpath(args.output_dir) +'/'
+
+output_mat = output_mat_path + output_mat_name
+
+if not os.path.exists(output_mat_path):
+    os.makedirs(output_mat_path)
+    bglog.warn("output_dir doesn't exists, creating required path "+output_mat)
+
+
+if os.path.isfile(output_mat):
+    bglog.warn("File Already Exits, over-writing - "+output_mat)
+else:
+    bglog.info("Writing to file - "+output_mat)
+
+with open(output_mat,'wb',0) as ofile:
+    savemat(ofile, {'start_time': bag.get_start_time() })
+    start_time = bag.get_start_time()
+    #for topic in progressbar.progressbar(config['topic_list']):
+    for topic in config['topic_list']:
+        topic_name = ns+topic[0]
+        msg_type = topic[1]
+        
+        if config['namespace'] is not None:
+            variable_name = topic[2] +'_'+ config['namespace']
+        else:
+            variable_name = topic[2]
+        expression = exp_dic[msg_type]
+        save_topic2file(topic_name, variable_name, expression, bag, ofile, start_time, subtract_start_time)
+ 
+bag.close()

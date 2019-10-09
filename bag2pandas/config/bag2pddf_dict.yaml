@@ -1,0 +1,171 @@
+# message_type:
+#  matlab_struct_field_name 1: expression1
+#  matlab_struct_field_name 2: expression2
+
+geometry_msgs/TwistStamped:
+ msg_time: t.to_sec()
+ header_timestamp: m.header.stamp.to_sec()
+ velocity_x: m.twist.linear.x
+ velocity_y: m.twist.linear.y
+ velocity_z: m.twist.linear.z
+ angular_velocity_x: m.twist.angular.x
+ angular_velocity_y: m.twist.angular.y
+ angular_velocity_z: m.twist.angular.z
+
+geometry_msgs/PoseStamped:
+ msg_time: t.to_sec()
+ header_timestamp: m.header.stamp.to_sec()
+ position_x: m.pose.position.x
+ position_y: m.pose.position.y
+ position_z: m.pose.position.z
+ orientation_quat_x: m.pose.orientation.x
+ orientation_quat_y: m.pose.orientation.y
+ orientation_quat_z: m.pose.orientation.z
+ orientation_quat_w: m.pose.orientation.w
+
+geometry_msgs/Vector3Stamped: 
+ msg_time: t.to_sec()
+ vector_x: m.vector.x
+ vector_y: m.vector.y
+ vector_z: m.vector.z
+
+nav_msgs/Odometry: 
+ msg_time: t.to_sec()
+ position_x: m.pose.pose.position.x
+ position_y: m.pose.pose.position.y
+ position_z: m.pose.pose.position.z
+ velocity_x: m.twist.twist.linear.x
+ velocity_y: m.twist.twist.linear.y
+ velocity_z: m.twist.twist.linear.z
+ orientation_quat_x: m.pose.pose.orientation.x
+ orientation_quat_y: m.pose.pose.orientation.y
+ orientation_quat_z: m.pose.pose.orientation.z
+ orientation_quat_w: m.pose.pose.orientation.w
+ angular_velocity_x: m.twist.twist.angular.x
+ angular_velocity_y: m.twist.twist.angular.y
+ angular_velocity_z: m.twist.twist.angular.z
+
+sensor_msgs/BatteryState: 
+ msg_time: t.to_sec()
+ voltage: m.voltage
+ current: m.current
+ charge: m.charge
+ capacity: m.capacity
+ design_capacity: m.design_capacity
+ percentage: m.percentage
+
+sensor_msgs/Imu: 
+ msg_time: t.to_sec()
+ header_timestamp: m.header.stamp.to_sec()
+ orientation_quat_x: m.orientation.x
+ orientation_quat_y: m.orientation.y
+ orientation_quat_z: m.orientation.z
+ orientation_quat_w: m.orientation.w
+ acceleration_x: m.linear_acceleration.x
+ acceleration_y: m.linear_acceleration.y
+ acceleration_z: m.linear_acceleration.z
+ angular_velocity_x: m.angular_velocity.x
+ angular_velocity_y: m.angular_velocity.y
+ angular_velocity_z: m.angular_velocity.z
+
+sensor_msgs/JointState:
+ msg_time: t.to_sec()
+
+sensor_msgs/Joy_UAS:
+ msg_time: t.to_sec()
+ cmd_velocity_x: m.axes[0]
+ cmd_velocity_y: m.axes[1]
+ cmd_velocity_z: m.axes[2]
+ cmd_yaw_rate: m.axes[3]
+ config_code: m.axes[4]
+
+sensor_msgs/Joy_DJI_RC:
+ msg_time: t.to_sec()
+ cmd_roll: m.axes[0]
+ cmd_pitch: m.axes[1]
+ cmd_yaw_rate: m.axes[2]
+ cmd_thrust:  m.axes[3]
+ cmd_mode: m.axes[4]
+ cmd_landing_gear: m.axes[5]
+
+sensor_msgs/MagneticField: 
+ msg_time: t.to_sec()
+ magnetic_field_x: m.magnetic_field.x
+ magnetic_field_y: m.magnetic_field.y
+ magnetic_field_z: m.magnetic_field.z
+
+sensor_msgs/NavSatFix:
+ msg_time: t.to_sec()
+ latitude: m.latitude
+ longitude: m.longitude
+ altitude: m.altitude
+
+sensor_msgs/Temperature:
+ msg_time: t.to_sec()
+ temperature: m.temperature
+
+sensor_msgs/TimeReference:
+ msg_time: t.to_sec()
+ header_timestamp: m.header.stamp.to_sec()
+ time_ref: m.time_ref.to_sec()
+
+std_msgs/Duration:
+ msg_time: t.to_sec()
+ duration: m.data.to_sec()
+
+std_msgs/Float32:
+ msg_time: t.to_sec()
+ data: m.data
+
+std_msgs/Float64:
+ msg_time: t.to_sec()
+ data: m.data
+
+std_msgs/Float64MultiArray:
+ msg_time: t.to_sec()
+
+std_msgs/Int8:
+ msg_time: t.to_sec()
+ data: m.data
+
+std_msgs/UInt8:
+ msg_time: t.to_sec()
+ data: m.data
+
+std_msgs/String:
+ msg_time: t.to_sec()
+ data: m.data
+
+tf2_msgs/TFMessage: 
+ msg_time: t.to_sec()
+
+##################
+# Custom messages
+##################
+seabed_drivers/DvlMeasurements:
+ msg_time: t.to_sec()
+ altitude: m.altitude
+ ranges_0: m.ranges[0]
+ ranges_1: m.ranges[1]
+ rnages_2: m.ranges[2]
+ ranges_3: m.ranges[3]
+ btv_x: m.btv.x
+ btv_y: m.btv.y
+ btv_z: m.btv.z
+ btv_e: m.btv_e
+ orientation_quat_x: m.orientation.x
+ orientation_quat_y: m.orientation.y
+ orientation_quat_z: m.orientation.z
+ orientation_quat_w: m.orientation.w
+ temperature: m.temperature
+ salinity: m.salinity
+ depth: m.depth
+ soundvel: m.soundvel
+
+seabed_drivers/ThrusterData: # t.to_sec(), m.prop_rpm, m.omega, m.voltage, m.current, m.temperature  
+ msg_time: t.to_sec()
+ prop_rpm: m.prop_rpm
+ omega: m.omega
+ voltage: m.voltage
+ current: m.current
+ temperature: m.temperature

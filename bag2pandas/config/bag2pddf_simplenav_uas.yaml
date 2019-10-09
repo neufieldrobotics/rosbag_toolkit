@@ -1,0 +1,13 @@
+namespace: [uas1, uas2, uas3, uas4] # list of namespaces to search
+topic_list: #- [topic_name, message_type(as per dictionary), variable_name in mat file
+- [/dji_sdk/flight_status, std_msgs/UInt8, flight_status]
+- [/dji_sdk/gps_position, sensor_msgs/NavSatFix, gps_fix]
+- [/dji_sdk/imu, sensor_msgs/Imu, imu_data]
+- [/dji_sdk/rc, sensor_msgs/Joy_DJI_RC, rc]
+- [/dji_sdk/flight_control_setpoint_generic, sensor_msgs/Joy_UAS, cmd_vel_joy]
+- [/dji_sdk/velocity, geometry_msgs/Vector3Stamped, velocity]
+- [/dji_sdk/height_above_takeoff, std_msgs/Float32, fusedHeight]
+- [/simplenav/odom, nav_msgs/Odometry, uas_odom]
+- [/simplenav/takeoffAltitude, std_msgs/Float64, takeoffAltitude]
+- [/simplenav/homePose, geometry_msgs/PoseStamped, homePose]
+- [/simplenav/cmd_vel, geometry_msgs/TwistStamped, cmd_vel]
