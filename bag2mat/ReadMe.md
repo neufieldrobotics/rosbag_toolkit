@@ -1,4 +1,4 @@
-# bag2mat
+# bagconvert
 
 * Takes a rosbag file and converts it to a matlab mat file based on settings specified in a Dictionary and a yaml config file.
   - Dictonary: The dicionary file specified which variables from each message type should be moved to the matlab array.

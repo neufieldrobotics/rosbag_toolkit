@@ -31,8 +31,11 @@ bglog = logging.getLogger("bag2matpy")
 logging.basicConfig(level=logging.INFO, format='%(levelname)8s  %(message)s')
 
 
-def save_topic2file(topic_name,variable_name,expression,bagfile,matfile, start_time, subtract_start_time):
+def save_topic2dict(topic_name, msg_dict, bagfile, start_time,subtract_start_time):
     bglog = logging.getLogger(__name__)
+    expression = ",".join(msg_dict.values())
+    field_names = msg_dict.keys()
+            
     data_array = []
     for topic, msg, ts in bagfile.read_messages(topics=[topic_name]):
         res = eval("{}".format(expression),{'np':np}, {'m': msg, 't':ts})
@@ -43,11 +46,16 @@ def save_topic2file(topic_name,variable_name,expression,bagfile,matfile, start_t
         
         data_array.append(res)
 
-    if data_array:    
-        savemat(matfile, {variable_name: np.array(data_array)})
-        bglog.info("Wrote topic: "+topic_name+" to variable: "+variable_name)
+    if data_array:        
+        data_dict = {}
+        for field_name, column in zip(field_names, np.array(data_array).T):
+            data_dict[field_name] = column[:,None]
+        
+        return data_dict
+
     else:
         bglog.warn("Notfound! Topic: "+topic_name)
+        return None
 
 # get the file path for rospy_tutorials
 rospack = rospkg.RosPack()
@@ -74,10 +82,10 @@ with open(args.dictionary, 'r') as f:
 with open(args.config_file, 'r') as f:
     config = yaml.safe_load(f)
 
-if config['namespace'] is None:
-    ns = ''
+if 'namespace' in config:
+    ns_prefixes = config['namespace'] 
 else:
-    ns = '/'+config['namespace']        
+    ns_prefixes = ['']
 
 subtract_start_time = args.subtract_start_time
 
@@ -103,18 +111,40 @@ else:
     bglog.info("Writing to file - "+output_mat)
 
 with open(output_mat,'wb',0) as ofile:
-    savemat(ofile, {'start_time': bag.get_start_time() })
+    
     start_time = bag.get_start_time()
+    savemat(ofile, {'start_time': start_time })
+    bag_topics = bag.get_type_and_topic_info().topics.keys()
     #for topic in progressbar.progressbar(config['topic_list']):
-    for topic in config['topic_list']:
-        topic_name = ns+topic[0]
-        msg_type = topic[1]
+    for ns_prefix in ns_prefixes:
         
-        if config['namespace'] is not None:
-            variable_name = topic[2] +'_'+ config['namespace']
-        else:
-            variable_name = topic[2]
-        expression = exp_dic[msg_type]
-        save_topic2file(topic_name, variable_name, expression, bag, ofile, start_time, subtract_start_time)
+        if any([topic.startswith('/'+ns_prefix) for topic in bag_topics]):
+            ns_dict = {}
+            for topic in config['topic_list']:
+                if ns_prefix:
+                    topic_name = '/'+ns_prefix+topic[0]
+                else:
+                    topic_name = topic[0]
+                msg_type = topic[1]
+                
+                #if 'namespace' in config:
+                #    variable_name = topic[2] +'_'+ config['namespace']
+                #else:
+                variable_name = topic[2]
+                msg_dict = exp_dic[msg_type]
+                
+                data_dict = save_topic2dict(topic_name, msg_dict , bag, start_time, subtract_start_time)
+                
+                if data_dict:
+                    ns_dict[variable_name] = data_dict
+            
+            if ns_dict:
+                if ns_prefix:
+                    savemat(ofile, {ns_prefix: ns_dict})
+                else:
+                    savemat(ofile, {'robot': ns_dict})
+                bglog.info("Wrote namespace: "+ns_prefix+" \n")
+        else: 
+            bglog.warn("Notfound! Namespace: "+ns_prefix+'\n')
  
 bag.close()
