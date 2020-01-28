@@ -23,6 +23,18 @@ geometry_msgs/PoseStamped:
  orientation_quat_z: m.pose.orientation.z
  orientation_quat_w: m.pose.orientation.w
 
+geometry_msgs/PoseWithCovarianceStamped:
+ msg_time: t.to_sec()
+ header_timestamp: m.header.stamp.to_sec()
+ position_x: m.pose.pose.position.x
+ position_y: m.pose.pose.position.y
+ position_z: m.pose.pose.position.z
+ orientation_quat_x: m.pose.pose.orientation.x
+ orientation_quat_y: m.pose.pose.orientation.y
+ orientation_quat_z: m.pose.pose.orientation.z
+ orientation_quat_w: m.pose.pose.orientation.w
+ #covariance: m.pose.covariance
+ 
 geometry_msgs/Vector3Stamped: 
  msg_time: t.to_sec()
  vector_x: m.vector.x

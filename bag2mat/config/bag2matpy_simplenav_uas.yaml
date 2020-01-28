@@ -1,4 +1,4 @@
-namespace: [uas1, uas2, uas3, uas4] # list of namespaces to search
+namespace: [uas1, uas2, uas3, uas4,''] # list of namespaces to search
 topic_list: #- [topic_name, message_type(as per dictionary), variable_name in mat file
 - [/dji_sdk/flight_status, std_msgs/UInt8, flight_status]
 - [/dji_sdk/gps_position, sensor_msgs/NavSatFix, gps_fix]
@@ -11,3 +11,5 @@ topic_list: #- [topic_name, message_type(as per dictionary), variable_name in ma
 - [/simplenav/takeoffAltitude, std_msgs/Float64, takeoffAltitude]
 - [/simplenav/homePose, geometry_msgs/PoseStamped, homePose]
 - [/simplenav/cmd_vel, geometry_msgs/TwistStamped, cmd_vel]
+- [/zed_node/pose_with_covariance, geometry_msgs/PoseWithCovarianceStamped, zed_pose]
+- [/zed_node/odom, nav_msgs/Odometry, zed_odom]

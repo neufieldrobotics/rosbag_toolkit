@@ -12,18 +12,19 @@ from __future__ import print_function
 import roslib
 import rospy
 import rostopic
+import rospkg
+import rosbag
 
 import argparse
 import importlib
 import sys
-import rospkg
-import rosbag
 import numpy as np
 import time
 from scipy.io import savemat
 import os
 import yaml
 import logging
+import copy
 #import progressbar
 #progressbar.streams.wrap_stderr()
 
@@ -136,7 +137,7 @@ with open(output_mat,'wb',0) as ofile:
                 data_dict = save_topic2dict(topic_name, msg_dict , bag, start_time, subtract_start_time)
                 
                 if data_dict:
-                    ns_dict[variable_name] = data_dict
+                    ns_dict[variable_name] = copy.deepcopy(data_dict)
             
             if ns_dict:
                 if ns_prefix:
