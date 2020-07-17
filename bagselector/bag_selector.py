@@ -85,8 +85,8 @@ class BagSelector:
                                 self.write_bag.write(self.image_pub_topics[i], msg_list[i], msg_list[i].header.stamp)
                         elif key == ord('i') :
                             for i in range(self.num_topics):
-                                print(os.path.join(self.write_folder_path,"cam"+str(i),str(oldt.secs)+".jpg"))
-                                cv2.imwrite(os.path.join(self.write_folder_path,"cam"+str(i),str(oldt.secs)+".jpg"), cv_img_list[i])
+                                print(os.path.join(self.write_folder_path,"cam"+str(i),str(oldt.secs)+str(oldt.nsecs)+".jpg"))
+                                cv2.imwrite(os.path.join(self.write_folder_path,"cam"+str(i),str(oldt.secs)+str(oldt.nsecs)+".jpg"), cv_img_list[i])
                         elif key == 27:
                             self.write_bag.close()
                             return
@@ -97,6 +97,7 @@ class BagSelector:
                 msg_list=[]
                 topiclist.append(topic)
                 msg_list.append(msg)
+        self.write_bag.close()
 
 
 if __name__=="__main__":
