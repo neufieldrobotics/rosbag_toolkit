@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 '''
 MIT License
 
@@ -22,14 +21,12 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-'''
 
-"""
 @author: Vikrant Shah
 A simple script that can converts rosmessages to matlab mat files
 Define the translation of each message type in a dictionary file and use a 
 config file to specify all the topics to be converted.
-"""
+'''
 from __future__ import print_function
 
 import roslib
