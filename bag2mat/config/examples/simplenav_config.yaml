@@ -1,0 +1,33 @@
+namespace: [frl_uas7, uas2, uas3, uas4, ''] # list of namespaces to search
+topic_list: 
+#- [topic_name, message_type(as per dictionary), variable_name in mat file
+- [/dji_sdk/flight_status, std_msgs/UInt8, dji_flight_status]
+- [/dji_sdk/gps_health, std_msgs/UInt8, dji_gps_quality]
+- [/dji_sdk/gps_position, sensor_msgs/NavSatFix, dji_gps_fix]
+- [/dji_sdk/imu, sensor_msgs/Imu, dji_imu]
+- [/dji_sdk/rc, sensor_msgs/Joy_DJI_RC, dji_rc]
+- [/dji_sdk/flight_control_setpoint_generic, sensor_msgs/Joy_UAS, dji_cmd_vel]
+- [/dji_sdk/velocity, geometry_msgs/Vector3Stamped, dji_velocity]
+- [/dji_sdk/height_above_takeoff, std_msgs/Float32, dji_fusedHeight]
+- [/dji_sdk/battery_state, sensor_msgs/BatteryState, dji_battery]
+
+- [/simplenav/odom, nav_msgs/Odometry, uas_odom]
+- [/simplenav/takeoffAltitude, std_msgs/Float64, takeoffAltitude]
+- [/simplenav/homePose, geometry_msgs/PoseStamped, homePose]
+- [/simplenav/cmd_vel, geometry_msgs/TwistStamped, cmd_vel]
+
+- [/lidarlite/range/down, sensor_msgs/Range, lidarlite_range_z]
+
+- [/ppk_fix/fix, sensor_msgs/NavSatFix, ppk_fix]
+#- [/ppk_fix/utm, geometry_msgs/PoseWithCovarianceStamped, ppk_utm]
+
+- [/camera_array/cam_0/image_raw, sensor_msgs/Image, vs_cam_0]
+- [/boson_camera_array/cam_0/image_raw, sensor_msgs/Image, ir_cam_0]
+
+- [/imu/imu, sensor_msgs/Imu, vn100_imu]
+- [/imu/fluid_pressure, sensor_msgs/FluidPressure, vn100_fluid_pressure]
+- [/imu/temperature, sensor_msgs/Temperature, vn100_temperature]
+- [/imu/magnetic_field, sensor_msgs/MagneticField, vn100_magnetic_field]
+
+- [/zed_node/pose_with_covariance, geometry_msgs/PoseWithCovarianceStamped, zed_pose]
+- [/zed_node/odom, nav_msgs/Odometry, zed_odom]

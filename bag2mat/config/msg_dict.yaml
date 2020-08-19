@@ -3,8 +3,8 @@
 #  matlab_struct_field_name 2: expression2
 
 geometry_msgs/TwistStamped:
- msg_time: t.to_sec()
- header_timestamp: m.header.stamp.to_sec()
+ bag_time: t.to_sec()
+ msg_time: m.header.stamp.to_sec()
  velocity_x: m.twist.linear.x
  velocity_y: m.twist.linear.y
  velocity_z: m.twist.linear.z
@@ -13,8 +13,8 @@ geometry_msgs/TwistStamped:
  angular_velocity_z: m.twist.angular.z
 
 geometry_msgs/PoseStamped:
- msg_time: t.to_sec()
- header_timestamp: m.header.stamp.to_sec()
+ bag_time: t.to_sec()
+ msg_time: m.header.stamp.to_sec()
  position_x: m.pose.position.x
  position_y: m.pose.position.y
  position_z: m.pose.position.z
@@ -24,8 +24,8 @@ geometry_msgs/PoseStamped:
  orientation_quat_w: m.pose.orientation.w
 
 geometry_msgs/PoseWithCovarianceStamped:
- msg_time: t.to_sec()
- header_timestamp: m.header.stamp.to_sec()
+ bag_time: t.to_sec()
+ msg_time: m.header.stamp.to_sec()
  position_x: m.pose.pose.position.x
  position_y: m.pose.pose.position.y
  position_z: m.pose.pose.position.z
@@ -36,29 +36,32 @@ geometry_msgs/PoseWithCovarianceStamped:
  #covariance: m.pose.covariance
  
 geometry_msgs/Vector3Stamped: 
- msg_time: t.to_sec()
+ bag_time: t.to_sec()
+ msg_time: m.header.stamp.to_sec()
  vector_x: m.vector.x
  vector_y: m.vector.y
  vector_z: m.vector.z
 
 nav_msgs/Odometry: 
- msg_time: t.to_sec()
+ bag_time: t.to_sec()
+ msg_time: m.header.stamp.to_sec()
  position_x: m.pose.pose.position.x
  position_y: m.pose.pose.position.y
  position_z: m.pose.pose.position.z
- velocity_x: m.twist.twist.linear.x
- velocity_y: m.twist.twist.linear.y
- velocity_z: m.twist.twist.linear.z
  orientation_quat_x: m.pose.pose.orientation.x
  orientation_quat_y: m.pose.pose.orientation.y
  orientation_quat_z: m.pose.pose.orientation.z
  orientation_quat_w: m.pose.pose.orientation.w
+ velocity_x: m.twist.twist.linear.x
+ velocity_y: m.twist.twist.linear.y
+ velocity_z: m.twist.twist.linear.z
  angular_velocity_x: m.twist.twist.angular.x
  angular_velocity_y: m.twist.twist.angular.y
  angular_velocity_z: m.twist.twist.angular.z
 
 sensor_msgs/BatteryState: 
- msg_time: t.to_sec()
+ bag_time: t.to_sec()
+ msg_time: m.header.stamp.to_sec()
  voltage: m.voltage
  current: m.current
  charge: m.charge
@@ -67,8 +70,8 @@ sensor_msgs/BatteryState:
  percentage: m.percentage
 
 sensor_msgs/Imu: 
- msg_time: t.to_sec()
- header_timestamp: m.header.stamp.to_sec()
+ bag_time: t.to_sec()
+ msg_time: m.header.stamp.to_sec()
  orientation_quat_x: m.orientation.x
  orientation_quat_y: m.orientation.y
  orientation_quat_z: m.orientation.z
@@ -81,10 +84,12 @@ sensor_msgs/Imu:
  angular_velocity_z: m.angular_velocity.z
 
 sensor_msgs/JointState:
- msg_time: t.to_sec()
+ bag_time: t.to_sec()
+ msg_time: m.header.stamp.to_sec() 
 
 sensor_msgs/Joy_UAS:
- msg_time: t.to_sec()
+ bag_time: t.to_sec()
+ msg_time: m.header.stamp.to_sec() 
  cmd_velocity_x: m.axes[0]
  cmd_velocity_y: m.axes[1]
  cmd_velocity_z: m.axes[2]
@@ -92,7 +97,8 @@ sensor_msgs/Joy_UAS:
  config_code: m.axes[4]
 
 sensor_msgs/Joy_DJI_RC:
- msg_time: t.to_sec()
+ bag_time: t.to_sec()
+ msg_time: m.header.stamp.to_sec() 
  cmd_roll: m.axes[0]
  cmd_pitch: m.axes[1]
  cmd_yaw_rate: m.axes[2]
@@ -101,61 +107,81 @@ sensor_msgs/Joy_DJI_RC:
  cmd_landing_gear: m.axes[5]
 
 sensor_msgs/MagneticField: 
- msg_time: t.to_sec()
+ bag_time: t.to_sec()
+ msg_time: m.header.stamp.to_sec()
  magnetic_field_x: m.magnetic_field.x
  magnetic_field_y: m.magnetic_field.y
  magnetic_field_z: m.magnetic_field.z
 
 sensor_msgs/NavSatFix:
- msg_time: t.to_sec()
+ bag_time: t.to_sec()
+ msg_time: m.header.stamp.to_sec()
  latitude: m.latitude
  longitude: m.longitude
  altitude: m.altitude
+ fix_status: m.status.status
 
 sensor_msgs/Temperature:
- msg_time: t.to_sec()
+ bag_time: t.to_sec()
+ msg_time: m.header.stamp.to_sec()
  temperature: m.temperature
+ variance: m.variance
+
+sensor_msgs/FluidPressure:
+ bag_time: t.to_sec()
+ msg_time: m.header.stamp.to_sec()
+ fluid_pressure: m.fluid_pressure
 
 sensor_msgs/TimeReference:
- msg_time: t.to_sec()
- header_timestamp: m.header.stamp.to_sec()
+ bag_time: t.to_sec()
+ msg_time: m.header.stamp.to_sec()
  time_ref: m.time_ref.to_sec()
 
+sensor_msgs/Range:
+ bag_time: t.to_sec()
+ msg_time: m.header.stamp.to_sec()
+ range: m.range
+
+sensor_msgs/Image:
+ bag_time: t.to_sec()
+ msg_time: m.header.stamp.to_sec()
+
 std_msgs/Duration:
- msg_time: t.to_sec()
+ bag_time: t.to_sec()
  duration: m.data.to_sec()
 
 std_msgs/Float32:
- msg_time: t.to_sec()
+ bag_time: t.to_sec()
  data: m.data
 
 std_msgs/Float64:
- msg_time: t.to_sec()
+ bag_time: t.to_sec()
  data: m.data
 
 std_msgs/Float64MultiArray:
- msg_time: t.to_sec()
+ bag_time: t.to_sec()
 
 std_msgs/Int8:
- msg_time: t.to_sec()
+ bag_time: t.to_sec()
  data: m.data
 
 std_msgs/UInt8:
- msg_time: t.to_sec()
+ bag_time: t.to_sec()
  data: m.data
 
 std_msgs/String:
- msg_time: t.to_sec()
+ bag_time: t.to_sec()
  data: m.data
 
 tf2_msgs/TFMessage: 
- msg_time: t.to_sec()
+ bag_time: t.to_sec()
 
 ##################
 # Custom messages
 ##################
 seabed_drivers/DvlMeasurements:
- msg_time: t.to_sec()
+ bag_time: t.to_sec()
+ msg_time: m.header.stamp.to_sec()
  altitude: m.altitude
  ranges_0: m.ranges[0]
  ranges_1: m.ranges[1]
@@ -175,7 +201,8 @@ seabed_drivers/DvlMeasurements:
  soundvel: m.soundvel
 
 seabed_drivers/ThrusterData: # t.to_sec(), m.prop_rpm, m.omega, m.voltage, m.current, m.temperature  
- msg_time: t.to_sec()
+ bag_time: t.to_sec()
+ msg_time: m.stamp.to_sec()
  prop_rpm: m.prop_rpm
  omega: m.omega
  voltage: m.voltage
