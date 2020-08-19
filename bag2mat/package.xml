@@ -1,25 +1,17 @@
-<package>
-
+<?xml version="1.0"?>
+<package format="2">
   <name>bag2mat</name>
   <version>1.0.0</version>
-  <description>
-  This package provides dataset parsing of rosbags to matlab format.
-  </description>
-  <maintainer email="pgeneva@udel.edu">Patrick Geneva</maintainer>
-  <author>Patrick Geneva</author>
-
-  <!-- Licensing -->
+  <description>Convert rosbag to mat file</description>
+  <maintainer email="shah.vi@northeastern.edu">Vikrant Shah</maintainer>
+  <maintainer email="diddi.m@northeastern.edu">Mithun Diddi</maintainer>
+  <author>Vikrant Shah</author>
   <license>MIT</license>
-
-  <!-- Dependencies which this package needs to build itself. -->
+  <url type="website">https://web.northeastern.edu/fieldrobotics</url>
   <buildtool_depend>catkin</buildtool_depend>
-
-  <!-- Dependencies needed after this package is compiled. -->
-  <run_depend>rosbag</run_depend>
-  <run_depend>roslib</run_depend>
-  <run_depend>rospkg</run_depend>
-
+  <depend>rosbag</depend>
+  <exec_depend>roslib</exec_depend>
+  <exec_depend>nodelet</exec_depend>  
+  <exec_depend>rospkg</exec_depend>
 </package>
-
-
 
