@@ -22,7 +22,7 @@ time range, frequency etc.
 '''
 
 class Image2Bag:
-    def __init__(self,topic_n, info_topics, freq, data_p="/home/auv/calib" , img_t="bmp"):
+    def __init__(self,topic_n, info_topics, freq, data_p="/home/auv/calib" ,op_file, img_t="bmp"):
         rospy.init_node('image_converter', anonymous=True)
         self.data_path=data_p
         self.topic_names = topic_n
@@ -37,7 +37,7 @@ class Image2Bag:
         self.get_imgs()
         self.to_bag= True
         if self.to_bag :
-            self.write_bag = rosbag.Bag("rosbag.bag", 'w')
+            self.write_bag = rosbag.Bag(op_file, 'w')
         self.frequency = freq
 
     def init_publishers(self):
@@ -77,7 +77,7 @@ class Image2Bag:
                 imgs = []
                 info_msgs = []
                 for j in range(self.num_topics):
-                    img = cv2.imread(self.im_list[i + j*self.num_imgs], cv2.IMREAD_UNCHANGED)
+                    img = cv2.imread(self.im_list[i + j*self.num_imgs], cv2.IMREAD_GRAYSCALE)
                     print(self.im_list[i + j*self.num_imgs])
                     ros_img = self.bridge.cv2_to_imgmsg(img, "mono8")
                     ros_img.header =  h
@@ -116,6 +116,6 @@ if __name__=="__main__":
 
     with open(args.config_file, 'r') as f:
         config = yaml.safe_load(f)
-  
-    bs = Image2Bag(config['topics'], config['info_topics'], config['frequency'], args.input_dir , config['img_type'])
+    op_file = os.path.join(args.output_dir, args.output_filename)
+    bs = Image2Bag(config['topics'], config['info_topics'], config['frequency'], args.input_dir , op_file, config['img_type'])
     bs.run()
