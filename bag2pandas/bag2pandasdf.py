@@ -51,10 +51,10 @@ def save_topic2df(topic_name, msg_dict, bagfile):
             
             if 'header_timestamp' in df.columns:
                 df['header_timestamp'] = pd.to_datetime(df['header_timestamp'], unit='s')
-                df.set_index('header_timestamp',inplace='True')
+                df.set_index('header_timestamp',inplace=True)
                 
             else:
-                df.set_index('msg_time',inplace='True')
+                df.set_index('msg_time',inplace=True)
                                     
             return df
 
