@@ -4,8 +4,8 @@ topics:
 - /camera_array/cam2/image_raw
 - /camera_array/cam3/image_raw
 - /camera_array/cam4/image_raw
-frequency: 2
-viz : True
+frequency: 1
+
 start_time: 0 # in seconds
-end_time:  65  # in seconds
+end_time: 120   # in seconds
 

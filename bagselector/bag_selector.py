@@ -22,7 +22,7 @@ time range, frequency etc.
 
 class BagSelector:
     def __init__(self,read_bag_path, write_folder_path, write_bag_path, save_imgs, config):
-        self.viz=False
+        self.viz=config['viz']
         self.calib=False
         self.write_bag = rosbag.Bag(os.path.join(write_folder_path,write_bag_path), 'w')
         self.write_folder_path = write_folder_path
@@ -73,23 +73,26 @@ class BagSelector:
                                     # Draw and display the corners
                                     cv_image = cv2.drawChessboardCorners(cv_image, (9,16), corners2,ret)
                             cv_img_list.append(cv_image)
-
-                        vis = np.concatenate(cv_img_list, axis=1)
-                        height, width = vis.shape
-                        target_size = (int( width/2), int(height/2))
-                        vis = cv2.resize(vis, target_size, interpolation =cv2.INTER_NEAREST)
-                        cv2.imshow("image", vis)
-                        key = cv2.waitKey(0) & 0xFF
-                        if key == ord('a') :
+                        if self.viz :
+                            vis = np.concatenate(cv_img_list, axis=1)
+                            height, width = vis.shape
+                            target_size = (int( width/2), int(height/2))
+                            vis = cv2.resize(vis, target_size, interpolation =cv2.INTER_NEAREST)
+                            cv2.imshow("image", vis)
+                            key = cv2.waitKey(0) & 0xFF
+                            if key == ord('a') :
+                                for i in range(self.num_topics):
+                                    self.write_bag.write(self.image_pub_topics[i], msg_list[i], msg_list[i].header.stamp)
+                            elif key == ord('i') :
+                                for i in range(self.num_topics):
+                                    print(os.path.join(self.write_folder_path,"cam"+str(i),str(oldt.secs)+str(oldt.nsecs)+".jpg"))
+                                    cv2.imwrite(os.path.join(self.write_folder_path,"cam"+str(i),str(oldt.secs)+str(oldt.nsecs)+".jpg"), cv_img_list[i])
+                            elif key == 27:
+                                self.write_bag.close()
+                                return
+                        else:
                             for i in range(self.num_topics):
                                 self.write_bag.write(self.image_pub_topics[i], msg_list[i], msg_list[i].header.stamp)
-                        elif key == ord('i') :
-                            for i in range(self.num_topics):
-                                print(os.path.join(self.write_folder_path,"cam"+str(i),str(oldt.secs)+".jpg"))
-                                cv2.imwrite(os.path.join(self.write_folder_path,"cam"+str(i),str(oldt.secs)+".jpg"), cv_img_list[i])
-                        elif key == 27:
-                            self.write_bag.close()
-                            return
                     count = count + 1
                 print("starting list\n")
 
@@ -97,6 +100,7 @@ class BagSelector:
                 msg_list=[]
                 topiclist.append(topic)
                 msg_list.append(msg)
+        self.write_bag.close()
 
 
 if __name__=="__main__":

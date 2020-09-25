@@ -1,0 +1,10 @@
+topics:
+- /zed_node/depth/depth_registered_drop
+- /zed_node/left/image_rect_color_drop
+- /zed_node/right/image_rect_color_drop
+
+frequency: 3
+
+start_time: 0 # in seconds
+end_time: 10   # in seconds
+
