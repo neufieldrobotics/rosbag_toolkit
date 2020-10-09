@@ -237,4 +237,3 @@ simplenav/NavigatorActionResult:
  reached_point_quat_y: m.result.refPose.pose.orientation.y
  reached_point_quat_z: m.result.refPose.pose.orientation.z
  reached_point_quat_w: m.result.refPose.pose.orientation.w
- 
