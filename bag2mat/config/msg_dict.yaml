@@ -208,3 +208,32 @@ seabed_drivers/ThrusterData: # t.to_sec(), m.prop_rpm, m.omega, m.voltage, m.cur
  voltage: m.voltage
  current: m.current
  temperature: m.temperature
+
+# simplenav action msg
+
+simplenav/NavigatorActionGoal:
+ bag_time: t.to_sec()
+ msg_time: m.header.stamp.to_sec()
+ goal_x: m.goal.goalPose.pose.position.x
+ goal_y: m.goal.goalPose.pose.position.y
+ goal_z: m.goal.goalPose.pose.position.z
+ goal_quat_x: m.goal.goalPose.pose.orientation.x
+ goal_quat_y: m.goal.goalPose.pose.orientation.y
+ goal_quat_z: m.goal.goalPose.pose.orientation.z
+ goal_quat_w: m.goal.goalPose.pose.orientation.w
+ start_point.x: m.goal.refStartPoint.x
+ start_point.y: m.goal.refStartPoint.y
+ start_point.z: m.goal.refStartPoint.z
+ use_start_point: m.goal.useStartPoint
+ active_hovering: m.goal.activeHovering
+
+simplenav/NavigatorActionResult:
+ bag_time: t.to_sec()
+ msg_time: m.result.refPose.header.stamp.to_sec()
+ reached_point_x: m.result.refPose.pose.position.x
+ reached_point_y: m.result.refPose.pose.position.y
+ reached_point_z: m.result.refPose.pose.position.z
+ reached_point_quat_x: m.result.refPose.pose.orientation.x
+ reached_point_quat_y: m.result.refPose.pose.orientation.y
+ reached_point_quat_z: m.result.refPose.pose.orientation.z
+ reached_point_quat_w: m.result.refPose.pose.orientation.w
