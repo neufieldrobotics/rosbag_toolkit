@@ -1,0 +1,5 @@
+namespace: ['']
+topic_list: 
+#- [topic_name, message_type(as per dictionary), variable_name in mat file
+ - [/imu/imu, sensor_msgs/Imu, vn100_imu]
+ - [/vehicle/gps/fix, sensor_msgs/NavSatFix, gps]

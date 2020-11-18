@@ -1,0 +1,7 @@
+topics:
+- /imu/imu
+output_bag_name:
+- imu_200_sync_20.bag
+start_time: 0 # in seconds
+end_time: 69   # in seconds
+

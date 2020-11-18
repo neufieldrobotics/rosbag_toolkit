@@ -1,6 +1,7 @@
 namespace: ['']
 topic_list: 
 #- [topic_name, message_type(as per dictionary), variable_name in mat file
- - [/imu/imu, sensor_msgs/Imu, imu_data]
- - [/sensor/xsens/sensor/imu_raw, sensor_msgs/Imu, xsens_imu_data]
- - [/android/tango1/imu_fixed, sensor_msgs/Imu, tango_imu_data]
+ - [/imu/imu, sensor_msgs/Imu, vn100_imu] # vn_100 topic name
+ - [/sensor/xsens/sensor/imu_raw, sensor_msgs/Imu, xsens_imu] # xsense imu
+ - [/android/tango1/imu_fixed, sensor_msgs/Imu, tango_imu] # tango phone
+ - [/imu0, sensor_msgs/Imu, euroc_imu] # euroc dataset imu topic

@@ -1,0 +1,4 @@
+namespace: ['']
+topic_list: #- [topic_name, message_type(as per dictionary), variable_name in mat file
+ - [/imu/imu, sensor_msgs/Imu,imu_data]
+ 
