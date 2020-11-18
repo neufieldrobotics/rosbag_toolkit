@@ -23,7 +23,7 @@ time range, frequency etc.
 class BagSelector:
     def __init__(self,read_bag_path, write_folder_path, write_bag_path, save_imgs, config):
         self.viz=config['viz']
-        self.calib=False
+        self.calib=True
         self.write_bag = rosbag.Bag(os.path.join(write_folder_path,write_bag_path), 'w')
         self.write_folder_path = write_folder_path
 
@@ -40,8 +40,27 @@ class BagSelector:
         self.start = rospy.Time(config['start_time'] + self.read_bag.get_start_time())
         self.end = rospy.Time(config['end_time'] + self.read_bag.get_start_time())
         self.frequency = config['frequency']
+        self.invert = config['invert']
         self.bag_to_bag()
 
+    def reverse_contrast(self,input_img,option):
+    
+    #INPUT:
+    # input_img : 8 bit raw_img in numpy format
+    # option: 1 - using max 8 bit value
+    # option: 2 - using bitwise_not(image) from opencv library
+    # option: 3 - using ~ operator on the image
+    
+    #OUTPUT:
+    # output_img: contrast reversed image: white becomes black and black becomes
+    # white
+        if option==1:
+            output_img = (255-input_img)
+        elif option==2:
+            output_img = cv.bitwise_not(input_img)
+        elif option==3:
+            output_img = ~(input_img)     
+        return output_img
 
     def bag_to_bag(self):
         oldt = 0;
@@ -50,6 +69,8 @@ class BagSelector:
         count = 0
         print(type(self.read_bag.get_start_time()))
         for topic, msg, t in self.read_bag.read_messages(topics=self.topics , start_time= self.start , end_time= self.end):
+            print(topic)
+            print(msg.header.stamp)
             if oldt == msg.header.stamp:
                 topiclist.append(topic)
                 msg_list.append(msg)
@@ -62,21 +83,27 @@ class BagSelector:
                         print('count:' + str(count))
                         print(t)
                         cv_img_list=[]
+                        draw_img_list=[]
                         for im_msg in msg_list:
                             cv_image = self.bridge.imgmsg_to_cv2(im_msg, "mono8")
+                            # invert the image
+                            if self.invert:
+                                cv_image = self.reverse_contrast(cv_image, 1)
+                            draw_image = cv_image.copy()
                             if self.calib:
                                 # Find the chess board corners
-                                ret, corners = cv2.findChessboardCorners(cv_image, (9,16),None)
+                                ret, corners = cv2.findChessboardCorners(draw_image, (4,10),None)
                                 if ret == True:
                                     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
-                                    corners2 = cv2.cornerSubPix(cv_image,corners,(11,11),(-1,-1),criteria)
+                                    corners2 = cv2.cornerSubPix(draw_image,corners,(11,11),(-1,-1),criteria)
                                     # Draw and display the corners
-                                    cv_image = cv2.drawChessboardCorners(cv_image, (9,16), corners2,ret)
+                                    draw_image = cv2.drawChessboardCorners(draw_image, (4,10), corners2,ret)
+                            draw_img_list.append(draw_image)
                             cv_img_list.append(cv_image)
                         if self.viz :
-                            vis = np.concatenate(cv_img_list, axis=1)
+                            vis = np.concatenate(draw_img_list, axis=1)
                             height, width = vis.shape
-                            target_size = (int( width/2), int(height/2))
+                            target_size = (int( width/1.5), int(height/1.5))
                             vis = cv2.resize(vis, target_size, interpolation =cv2.INTER_NEAREST)
                             cv2.imshow("image", vis)
                             key = cv2.waitKey(0) & 0xFF

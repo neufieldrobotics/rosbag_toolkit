@@ -1,0 +1,12 @@
+topics:
+- /boson_camera_array/cam0/image_raw
+- /boson_camera_array/cam1/image_raw
+- /boson_camera_array/cam2/image_raw
+- /boson_camera_array/cam3/image_raw
+- /boson_camera_array/cam4/image_raw
+frequency: 4
+viz : True
+invert: False
+start_time: 0 # in seconds
+end_time:  120 # in seconds
+
