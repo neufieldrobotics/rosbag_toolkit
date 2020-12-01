@@ -22,7 +22,7 @@ time range, frequency etc.
 '''
 
 class Image2Bag:
-    def __init__(self,topic_n, info_topics, freq, data_p="/home/auv/calib" ,op_file, img_t="bmp"):
+    def __init__(self,topic_n, info_topics, freq, op_file, data_p="/home/auv/calib" ,img_t="bmp"):
         rospy.init_node('image_converter', anonymous=True)
         self.data_path=data_p
         self.topic_names = topic_n
@@ -117,5 +117,5 @@ if __name__=="__main__":
     with open(args.config_file, 'r') as f:
         config = yaml.safe_load(f)
     op_file = os.path.join(args.output_dir, args.output_filename)
-    bs = Image2Bag(config['topics'], config['info_topics'], config['frequency'], args.input_dir , op_file, config['img_type'])
+    bs = Image2Bag(config['topics'], config['info_topics'], config['frequency'], op_file, args.input_dir , config['img_type'])
     bs.run()

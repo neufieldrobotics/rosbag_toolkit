@@ -92,12 +92,12 @@ class BagSelector:
                             draw_image = cv_image.copy()
                             if self.calib:
                                 # Find the chess board corners
-                                ret, corners = cv2.findChessboardCorners(draw_image, (4,10),None)
+                                ret, corners = cv2.findChessboardCorners(draw_image, (6,12),None)
                                 if ret == True:
                                     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
                                     corners2 = cv2.cornerSubPix(draw_image,corners,(11,11),(-1,-1),criteria)
                                     # Draw and display the corners
-                                    draw_image = cv2.drawChessboardCorners(draw_image, (4,10), corners2,ret)
+                                    draw_image = cv2.drawChessboardCorners(draw_image, (6,12), corners2,ret)
                             draw_img_list.append(draw_image)
                             cv_img_list.append(cv_image)
                         if self.viz :
