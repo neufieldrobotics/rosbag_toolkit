@@ -8,4 +8,9 @@ frequency: 4
 viz : True
 start_time: 0 # in seconds
 end_time:  180  # in seconds
+calib: True
+board_rows: 16
+board_cols: 9
+invert: False
+save_type: bmp
 
