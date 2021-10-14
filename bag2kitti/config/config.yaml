@@ -8,4 +8,5 @@ frequency: 1
 
 start_time: 0 # in seconds
 end_time: 100000   # in seconds
+num_frames: 150
 
