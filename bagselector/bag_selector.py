@@ -77,7 +77,7 @@ class BagSelector:
                 #print(msg.header.frame_id)
             else:
                 oldt =  msg.header.stamp
-                if len(topiclist) == self.num_topics and topiclist==self.topics :
+                if len(topiclist) == self.num_topics: #and topiclist==self.topics :
                     if count % self.frequency == 0:
                         print("Writing to bag:")
                         print('count:' + str(count))
@@ -112,8 +112,8 @@ class BagSelector:
                                     self.write_bag.write(self.image_pub_topics[i], msg_list[i], msg_list[i].header.stamp)
                             elif key == ord('i') :
                                 for i in range(self.num_topics):
-                                    print(os.path.join(self.write_folder_path,"cam"+str(i),str(oldt.secs)+str(oldt.nsecs)+"."+self.save_type))
-                                    cv2.imwrite(os.path.join(self.write_folder_path,"cam"+str(i),str(oldt.secs)+str(oldt.nsecs)+"."+self.save_type), cv_img_list[i])
+                                    print(os.path.join(self.write_folder_path,"cam"+str(i),str(oldt.to_nsec())+"."+self.save_type))
+                                    cv2.imwrite(os.path.join(self.write_folder_path,"cam"+str(i),str(oldt.to_nsec())+"."+self.save_type), cv_img_list[i])
                             elif key == 27:
                                 self.write_bag.close()
                                 return

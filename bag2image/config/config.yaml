@@ -7,5 +7,6 @@ topics:
 frequency: 1
 
 start_time: 0 # in seconds
-end_time: 120   # in seconds
+end_time: 400   # in seconds
+viz: false
 
