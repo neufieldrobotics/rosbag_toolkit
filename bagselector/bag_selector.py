@@ -77,7 +77,7 @@ class BagSelector:
                 #print(msg.header.frame_id)
             else:
                 oldt =  msg.header.stamp
-                if len(topiclist) == self.num_topics: #and topiclist==self.topics :
+                if len(topiclist) == self.num_topics and topiclist==self.topics :
                     if count % self.frequency == 0:
                         print("Writing to bag:")
                         print('count:' + str(count))

@@ -11,14 +11,14 @@ base_camera_frequency:
 base_imu_frequency:
 - 400
 downsampled_camera_frequency:  # in hz
-- 20 
+- 20
 - 40 
 - 80
 downsampled_imu_frequency:
 - 400
 
 file_name:
-- vio_sync_exp_2000us_shelf_data_with_optitrack_3
+- vio_sync_exp_2000us_lab_3D
 
 # Enter start_time and end_time as 0 
 # if complete bag is to be analysed

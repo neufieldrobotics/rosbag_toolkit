@@ -4,10 +4,10 @@ topics:
 - /camera_array/cam2/image_raw
 - /camera_array/cam3/image_raw
 - /camera_array/cam4/image_raw
-frequency: 4
+frequency: 1
 viz : True
 start_time: 0 # in seconds
-end_time:  180  # in seconds
+end_time:  500  # in seconds
 calib: True
 board_rows: 16
 board_cols: 9

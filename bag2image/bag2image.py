@@ -80,8 +80,10 @@ class Bag2Image:
                             cv_img_list.append(cv_image)
 
                         for i in range(self.num_topics):
-                            print(os.path.join(self.write_folder_path,"cam"+str(i),str(oldt.to_nsec())+".jpg"))
-                            cv2.imwrite(os.path.join(self.write_folder_path,"cam"+str(i),str(oldt.to_nsec())+".jpg"), cv_img_list[i])
+                            writepath = os.path.join(self.write_folder_path,"cam"+str(i),str(oldt.to_nsec())+".jpg")
+                            if not os.path.exists(writepath):
+                                print(writepath)
+                                cv2.imwrite(writepath, cv_img_list[i])
                     count = count + 1
                 print("starting list\n")
 
