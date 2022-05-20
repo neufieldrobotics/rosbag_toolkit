@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """
@@ -32,7 +32,7 @@ import time
 def save_topic2df(topic_name, msg_dict, bagfile):
     #bglog = logging.getLogger(__name__)
     expression = ",".join(msg_dict.values())
-    field_names = msg_dict.keys()
+    field_names = list(msg_dict.keys())
             
     data_array = []
     if  bag.get_message_count(topic_name) > 0:

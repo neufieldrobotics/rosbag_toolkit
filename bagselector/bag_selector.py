@@ -28,7 +28,7 @@ class BagSelector:
         self.write_folder_path = write_folder_path
         self.save_type = config['save_type']
         self.bridge = CvBridge()
-        self.topics =  self.image_pub_topics  = config['topics']
+        self.topics =  self.image_pub_topics  = sorted(config['topics'])
 
         self.num_topics = len(self.topics)
         rospy.init_node('BagSelector', anonymous = True)
@@ -41,6 +41,7 @@ class BagSelector:
         self.end = rospy.Time(config['end_time'] + self.read_bag.get_start_time())
         self.frequency = config['frequency']
         self.invert = config['invert']
+        self.gray = config['gray']
         self.bag_to_bag()
 
     def reverse_contrast(self,input_img,option):
@@ -62,6 +63,18 @@ class BagSelector:
             output_img = ~(input_img)     
         return output_img
 
+    def sort_topics_msgs(self,topic_list, msg_list):
+        np_topic_list = np.array(topic_list)
+        sorted_inds = np.argsort(np_topic_list)
+        print(topic_list)
+        print(sorted_inds)
+        sorted_topiclist= []
+        sorted_msglist=[]
+        for ind in sorted_inds:
+            sorted_msglist.append(msg_list[ind])
+            sorted_topiclist.append(topic_list[ind])
+        return sorted_topiclist, sorted_msglist
+                
     def bag_to_bag(self):
         oldt = 0;
         topiclist=[]
@@ -69,24 +82,32 @@ class BagSelector:
         count = 0
         print(type(self.read_bag.get_start_time()))
         for topic, msg, t in self.read_bag.read_messages(topics=self.topics , start_time= self.start , end_time= self.end):
-            print(topic)
-            print(msg.header.stamp)
             if oldt == msg.header.stamp:
                 topiclist.append(topic)
                 msg_list.append(msg)
                 #print(msg.header.frame_id)
             else:
                 oldt =  msg.header.stamp
+                #sort the topic list and msgs 
+                topiclist, msg_list = self.sort_topics_msgs(topiclist, msg_list)
                 if len(topiclist) == self.num_topics and topiclist==self.topics :
                     if count % self.frequency == 0:
                         print("Writing to bag:")
                         print('count:' + str(count))
                         print(t)
+                        print(topiclist)
                         cv_img_list=[]
                         draw_img_list=[]
+                        gray_msg_list = []
                         for im_msg in msg_list:
-                            cv_image = self.bridge.imgmsg_to_cv2(im_msg, "mono8")
-                            # invert the image
+                            cv_image = self.bridge.imgmsg_to_cv2(im_msg, "bgr8")
+                            # Convert the image to gray scale
+                            if self.gray:
+                                cv_image = self.bridge.imgmsg_to_cv2(im_msg, "mono8")
+                                gray_msg = self.bridge.cv2_to_imgmsg(cv_image, encoding="mono8")
+                                gray_msg.header.stamp = im_msg.header.stamp
+                                gray_msg_list.append(gray_msg)
+                            # invert the image    
                             if self.invert:
                                 cv_image = self.reverse_contrast(cv_image, 1)
                             draw_image = cv_image.copy()
@@ -102,14 +123,22 @@ class BagSelector:
                             cv_img_list.append(cv_image)
                         if self.viz :
                             vis = np.concatenate(draw_img_list, axis=1)
-                            height, width = vis.shape
+                            height = 0
+                            width = 0
+                            if self.gray:
+                                height, width = vis.shape
+                            else:
+                                height, width,_ = vis.shape
                             target_size = (int( width/1.5), int(height/1.5))
                             vis = cv2.resize(vis, target_size, interpolation =cv2.INTER_NEAREST)
                             cv2.imshow("image", vis)
                             key = cv2.waitKey(0) & 0xFF
                             if key == ord('a') :
                                 for i in range(self.num_topics):
-                                    self.write_bag.write(self.image_pub_topics[i], msg_list[i], msg_list[i].header.stamp)
+                                   if self.gray:
+                                       self.write_bag.write(self.image_pub_topics[i], gray_msg_list[i], gray_msg_list[i].header.stamp)
+                                   else:
+                                       self.write_bag.write(self.image_pub_topics[i], msg_list[i], msg_list[i].header.stamp)
                             elif key == ord('i') :
                                 for i in range(self.num_topics):
                                     print(os.path.join(self.write_folder_path,"cam"+str(i),str(oldt.to_nsec())+"."+self.save_type))
@@ -119,7 +148,10 @@ class BagSelector:
                                 return
                         else:
                             for i in range(self.num_topics):
-                                self.write_bag.write(self.image_pub_topics[i], msg_list[i], msg_list[i].header.stamp)
+                                if self.gray:
+                                    self.write_bag.write(self.image_pub_topics[i], gray_msg_list[i], gray_msg_list[i].header.stamp)
+                                else:
+                                    self.write_bag.write(self.image_pub_topics[i], msg_list[i], msg_list[i].header.stamp)
                     count = count + 1
                 print("starting list\n")
 

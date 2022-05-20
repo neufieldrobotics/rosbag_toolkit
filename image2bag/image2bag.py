@@ -47,39 +47,49 @@ class Image2Bag:
             self.pubs.append(image_pub)
             self.cam_info_pubs.append(cam_info_pub)
 
-    def get_imgs(self):
-        li_single = glob.glob(os.path.join(self.data_path ,"cam0/*."+self.img_type))
-        #print(os.path.join(self.data_path ,"cam0/*.", self.img_type))
-        self.num_imgs = len(li_single)
+    def get_imgs(self):       
         # check all cam directories has the same number f images
         # check the number of diretories is equal to number of topics publishing
 
-        dirs = [ name for name in os.listdir(self.data_path) if os.path.isdir(os.path.join(self.data_path, name)) ]
-        #print(dirs)
-        dirs.sort()
-        if(len(dirs) != self.num_topics):
+        self.dirs = [ name for name in os.listdir(self.data_path) if os.path.isdir(os.path.join(self.data_path, name)) ]
+        self.dirs.sort()
+        print(self.dirs)
+        if(len(self.dirs) != self.num_topics):
             print("ERROR: number of image directories is not equal to number of topics")
-            exit()
-
-        self.im_list = glob.glob(os.path.join(self.data_path ,"cam*/*."+self.img_type))
+            exit()            
+        self.im_list = os.listdir(os.path.join(self.data_path,self.dirs[0])) #glob.glob(os.path.join(self.data_path ,"cam*/*."+self.img_type))
         self.im_list.sort()
+        self.num_imgs = len(self.im_list)
+        #print(self.im_list)
+        for i in range(len(self.dirs)):
+            assert len(os.listdir(os.path.join(self.data_path,self.dirs[i]))) == self.num_imgs
 
     def run(self):
-        r = rospy.Rate(self.frequency) # 10hz
+        if self.frequency == 0:
+            print("Use the time stamp")
+            delT = (int(self.im_list[1][:-4])-int(self.im_list[0][:-4])) *1e-9 
+            r = rospy.Rate(1/delT) # 10hz
+        else:
+            print("use the specified frequency to write the ros bag")
+            r = rospy.Rate(self.frequency) # 10hz
         i=0
         print(self.num_imgs)
         while not rospy.is_shutdown():
             if ( i < self.num_imgs):
                 h = std_msgs.msg.Header()
-                h.stamp = rospy.Time.now()
+                if self.frequency == 0:
+                    floatStamp = int(self.im_list[i][:-4])*1e-9
+                    h.stamp = rospy.Time.from_sec(floatStamp)
+                else:
+                    h.stamp = rospy.Time.now()
                 h.seq = i
                 print("--------------------------------")
                 imgs = []
                 info_msgs = []
                 for j in range(self.num_topics):
-                    img = cv2.imread(self.im_list[i + j*self.num_imgs], cv2.IMREAD_GRAYSCALE)
-                    print(self.im_list[i + j*self.num_imgs])
-                    ros_img = self.bridge.cv2_to_imgmsg(img, "mono8")
+                    img = cv2.imread(os.path.join(self.data_path,self.dirs[j],self.im_list[i]), cv2.IMREAD_COLOR)
+                    print(os.path.join(self.data_path,self.dirs[j],self.im_list[i]))
+                    ros_img = self.bridge.cv2_to_imgmsg(img, "bgr8")
                     ros_img.header =  h
                     imgs.append(ros_img)
                     cam_info_msg = CameraInfo()

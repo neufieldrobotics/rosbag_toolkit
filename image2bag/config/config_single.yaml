@@ -1,10 +1,10 @@
 topics:
-- /camera_array/cam0/image_raw
+- /camera_array/cam2/image_raw
 
 info_topics:
-- /camera_array/cam0/camera_info
+- /camera_array/cam2/camera_info
 
-img_type: png
+img_type: jpg
 
-frequency: 10
+frequency: 0
 

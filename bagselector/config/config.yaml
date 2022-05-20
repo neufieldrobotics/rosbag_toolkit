@@ -1,16 +1,13 @@
 topics:
-- /camera_array/cam0/image_raw
-- /camera_array/cam1/image_raw
-- /camera_array/cam2/image_raw
-- /camera_array/cam3/image_raw
-- /camera_array/cam4/image_raw
-frequency: 1
+- /camera_array/cam5/image_raw
+frequency: 5
 viz : True
 start_time: 0 # in seconds
-end_time:  500  # in seconds
+end_time:  5000  # in seconds
 calib: True
 board_rows: 16
 board_cols: 9
 invert: False
+gray: True
 save_type: bmp
 

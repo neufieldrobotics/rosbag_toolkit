@@ -96,6 +96,7 @@ sensor_msgs/MagneticField:
 
 sensor_msgs/NavSatFix:
  msg_time: t.to_sec()
+ header_timestamp: m.header.stamp.to_sec()
  latitude: m.latitude
  longitude: m.longitude
  altitude: m.altitude
